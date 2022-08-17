@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>0e5a29c3-bec8-4ee7-8332-35f9c4e1c957</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\NovaPasta1\**" />
+    <Compile Remove="Controllers\NovaPasta\**" />
+    <Content Remove="Controllers\NovaPasta1\**" />
+    <Content Remove="Controllers\NovaPasta\**" />
+    <EmbeddedResource Remove="Controllers\NovaPasta1\**" />
+    <EmbeddedResource Remove="Controllers\NovaPasta\**" />
+    <None Remove="Controllers\NovaPasta1\**" />
+    <None Remove="Controllers\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+</Project>
