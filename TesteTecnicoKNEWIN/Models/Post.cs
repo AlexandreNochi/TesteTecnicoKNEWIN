@@ -9,9 +9,9 @@ namespace TesteTecnicoKNEWIN.Models
         public int Id { get; set; }
 
         [ForeignKey("User")]
-        public int IdAuthor { get; set; }
+        public int UserId { get; set; }
 
-        public DateTime PublicationDate { get; set; }
+        public DateTime PublicationDate { get; private set; }
 
         [Required(AllowEmptyStrings = false)]
         public string Title { get; set; }
@@ -19,10 +19,10 @@ namespace TesteTecnicoKNEWIN.Models
         [Required(AllowEmptyStrings = false)]
         public string Content { get; set; }
 
-        public Post(int id, int idAuthor, string title, string content)
+        public Post(int id, int userId, string title, string content)
         {
             Id = id;
-            IdAuthor = idAuthor;
+            UserId = userId;
             PublicationDate = DateTime.Now;
             Title = title;
             Content = content;

@@ -22,5 +22,8 @@ namespace TesteTecnicoKNEWIN.Models
             Name = name;
             Email = email;
         }
+
+        [ForeignKey("UserId")]
+        public ICollection<Post> Posts { get; set; }
     }
 }
