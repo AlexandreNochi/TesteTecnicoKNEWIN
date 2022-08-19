@@ -59,12 +59,21 @@ namespace TesteTecnicoKNEWIN.Controllers
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id, Post post)
+        public async Task<IActionResult> PutPost(int id, PostPutDTO postUpdateData)
         {
-            if (id != post.Id)
-            {
-                return BadRequest();
-            }
+            if (ModelState.ValidationState != ModelValidationState.Valid)
+                return BadRequest(new
+                {
+                    mensagem = ModelState.Select(s => s.Key)
+                });
+
+            var post = _context.Posts.FirstOrDefault(x => id == x.Id);
+
+            if (post == null)
+                return BadRequest(new { mensagem = "id not found" });
+
+            post.Title = postUpdateData.Title;
+            post.Content = postUpdateData.Content;
 
             _context.Entry(post).State = EntityState.Modified;
 
@@ -90,7 +99,7 @@ namespace TesteTecnicoKNEWIN.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost([FromBody]PostDTO postData)
+        public async Task<ActionResult<Post>> PostPost([FromBody]PostCreateDTO postData)
         {
             if (_context.Posts == null)
                 return Problem("Entity set 'AppDbContext.Posts'  is null.");
