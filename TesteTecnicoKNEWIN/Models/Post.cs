@@ -19,6 +19,14 @@ namespace TesteTecnicoKNEWIN.Models
         [Required(AllowEmptyStrings = false)]
         public string Content { get; set; }
 
+        public Post(int userId, string title, string content)
+        {
+            UserId = userId;
+            PublicationDate = DateTime.Now;
+            Title = title;
+            Content = content;
+        }
+
         public Post(int id, int userId, string title, string content)
         {
             Id = id;

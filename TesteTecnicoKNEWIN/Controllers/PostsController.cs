@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using TesteTecnicoKNEWIN.Data;
+using TesteTecnicoKNEWIN.DTOs;
 using TesteTecnicoKNEWIN.Models;
 
 namespace TesteTecnicoKNEWIN.Controllers
@@ -21,15 +23,19 @@ namespace TesteTecnicoKNEWIN.Controllers
             _context = context;
         }
 
-        // GET: api/Posts
+        //GET: api/Post by User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
+        public async Task<ActionResult<IEnumerable<Post>>> GetPosts([FromQuery] int? userId)
         {
-          if (_context.Posts == null)
-          {
-              return NotFound();
-          }
-            return await _context.Posts.ToListAsync();
+            if (_context.Posts == null)
+            {
+                return NotFound();
+            }
+
+            if (userId == null)
+                return await _context.Posts.ToListAsync();
+
+            return await _context.Posts.Where(x => x.UserId == userId).ToListAsync();
         }
 
         // GET: api/Posts/5
@@ -84,12 +90,16 @@ namespace TesteTecnicoKNEWIN.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost(Post post)
+        public async Task<ActionResult<Post>> PostPost([FromBody]PostCreateDTO postData)
         {
-          if (_context.Posts == null)
-          {
-              return Problem("Entity set 'AppDbContext.Posts'  is null.");
-          }
+            if (_context.Posts == null)
+                return Problem("Entity set 'AppDbContext.Posts'  is null.");
+
+            if (ModelState.ValidationState != ModelValidationState.Valid)
+                return BadRequest();
+
+            Post post = new(postData.UserId, postData.Title, postData.Content);
+            
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 

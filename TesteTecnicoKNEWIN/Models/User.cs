@@ -16,6 +16,12 @@ namespace TesteTecnicoKNEWIN.Models
         [Required(AllowEmptyStrings = false)]
         public string Email { get; set; }
 
+        public User(string name, string email)
+        {
+            Name = name;
+            Email = email;
+        }
+
         public User(int id, string name, string email)
         {
             Id = id;
@@ -24,6 +30,6 @@ namespace TesteTecnicoKNEWIN.Models
         }
 
         [ForeignKey("UserId")]
-        public ICollection<Post> Posts { get; set; }
+        public ICollection<Post>? Posts { get; set; }
     }
 }

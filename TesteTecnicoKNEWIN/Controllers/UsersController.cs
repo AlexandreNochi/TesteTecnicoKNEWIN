@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using TesteTecnicoKNEWIN.Data;
+using TesteTecnicoKNEWIN.DTOs;
 using TesteTecnicoKNEWIN.Models;
 
 namespace TesteTecnicoKNEWIN.Controllers
@@ -84,12 +86,15 @@ namespace TesteTecnicoKNEWIN.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser([FromBody] UserCreateDTO userData)
         {
-          if (_context.Users == null)
-          {
+            if (_context.Users == null)
               return Problem("Entity set 'AppDbContext.Users'  is null.");
-          }
+
+            if (ModelState.ValidationState != ModelValidationState.Valid)
+                return BadRequest();
+
+            User user = new(userData.Name, userData.Email);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
