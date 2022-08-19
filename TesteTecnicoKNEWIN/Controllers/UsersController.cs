@@ -55,12 +55,15 @@ namespace TesteTecnicoKNEWIN.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserDTO userData)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+            User user = new(id, userData.Name, userData.Email);
+            
+            if (ModelState.ValidationState != ModelValidationState.Valid)
+                return BadRequest(new
+                {
+                    mensagem = ModelState.Select(s => s.Key)
+                });
 
             _context.Entry(user).State = EntityState.Modified;
 
@@ -86,13 +89,15 @@ namespace TesteTecnicoKNEWIN.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser([FromBody] UserCreateDTO userData)
+        public async Task<ActionResult<User>> PostUser([FromBody] UserDTO userData)
         {
             if (_context.Users == null)
               return Problem("Entity set 'AppDbContext.Users'  is null.");
 
             if (ModelState.ValidationState != ModelValidationState.Valid)
-                return BadRequest();
+                return BadRequest(new {
+                    mensagem = ModelState.Select(s=>s.Key)
+                });
 
             User user = new(userData.Name, userData.Email);
             _context.Users.Add(user);

@@ -3,7 +3,7 @@ using TesteTecnicoKNEWIN.Models;
 
 namespace TesteTecnicoKNEWIN.DTOs
 {
-    public class UserCreateDTO
+    public class UserDTO
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Nome vazio")]
         public string Name { get; set; }

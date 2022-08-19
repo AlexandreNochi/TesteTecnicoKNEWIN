@@ -90,7 +90,7 @@ namespace TesteTecnicoKNEWIN.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost([FromBody]PostCreateDTO postData)
+        public async Task<ActionResult<Post>> PostPost([FromBody]PostDTO postData)
         {
             if (_context.Posts == null)
                 return Problem("Entity set 'AppDbContext.Posts'  is null.");
@@ -121,6 +121,28 @@ namespace TesteTecnicoKNEWIN.Controllers
             }
 
             _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/Posts/6
+        [HttpDelete]
+        public async Task<IActionResult> DeletePosts([FromQuery] int? userId)
+        {
+            if (_context.Posts == null)
+            {
+                return NotFound();
+            }
+
+            if (userId == null)
+                return BadRequest(new {ErrorMensage = "UserId invalido"});
+
+            var posts = await _context.Posts.Where(x => x.UserId == userId).ToListAsync();
+
+            foreach (var post in posts)
+                _context.Entry(post).State = EntityState.Deleted;
+
             await _context.SaveChangesAsync();
 
             return NoContent();

@@ -2,7 +2,7 @@
 
 namespace TesteTecnicoKNEWIN.DTOs
 {
-    public class PostCreateDTO
+    public class PostDTO
     {
         public int UserId { get; set; }
 
